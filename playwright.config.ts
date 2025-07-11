@@ -9,4 +9,18 @@ export default defineConfig({
     baseURL: 'https://www.saucedemo.com',
     headless: true,
   },
+  projects: [
+    {
+      name: 'chromium',
+      use: { browserName: 'chromium' },
+    },
+    {
+      name: 'firefox',
+      use: { browserName: 'firefox' },
+    },
+    {
+      name: 'webkit',
+      use: { browserName: 'webkit' },
+    },
+  ],
 });
