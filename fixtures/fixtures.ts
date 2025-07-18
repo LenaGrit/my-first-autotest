@@ -6,7 +6,11 @@ import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 
 type MyFixtures = {
+  // открывает страницу логина
   loginPage: LoginPage;
+  // сразу логинит standard_user
+  authPage: LoginPage;
+  // POM для inventory/cart/checkout на уже залогиненом standard_user контексте
   inventoryPage: InventoryPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
@@ -14,27 +18,30 @@ type MyFixtures = {
 
 export const test = base.extend<MyFixtures>({
   loginPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    await loginPage.usernameInput.fill('standard_user');
-    await loginPage.passwordInput.fill('secret_sauce');
-    await loginPage.loginButton.click();
+    const login = new LoginPage(page);
+    await login.goto();
+    await use(login);
+  },
+
+  authPage: async ({ loginPage }, use) => {
+    // автоматический логин
+    await loginPage.loginAs('standard_user');
     await use(loginPage);
   },
 
-  inventoryPage: async ({ page }, use) => {
-    const inventoryPage = new InventoryPage(page);
-    await use(inventoryPage);
+  inventoryPage: async ({ authPage }, use) => {
+    const inv = new InventoryPage(authPage.page);
+    await use(inv);
   },
 
-  cartPage: async ({ page }, use) => {
-    const cartPage = new CartPage(page);
-    await use(cartPage);
+  cartPage: async ({ authPage }, use) => {
+    const cart = new CartPage(authPage.page);
+    await use(cart);
   },
 
-  checkoutPage: async ({ page }, use) => {
-    const checkoutPage = new CheckoutPage(page);
-    await use(checkoutPage);
+  checkoutPage: async ({ authPage }, use) => {
+    const co = new CheckoutPage(authPage.page);
+    await use(co);
   },
 });
 
