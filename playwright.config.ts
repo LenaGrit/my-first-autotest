@@ -10,8 +10,15 @@ export default defineConfig({
   use: {
     baseURL: 'https://www.saucedemo.com',
     headless: false, //режим, в котором браузер запускается с видимым окном, а не "в фоне".
-    //true - невидимо, false - открытие "вживую")
+    //true - невидимо, false - открытие "вживую". 
+    // Можно запустить единоразово: npx playwright test --headed)
+
+    screenshot: 'only-on-failure', //если тест упадет - сделай скрин момента ошибки
+    // video: 'retain-on-failure', //если тест упадет - сделай видео момента ошибки
+    // trace: 'on-first-retry', //логи всего теста при падении, видео и разбор, оч подробно
+
   },
+
   projects: [
     {
       name: 'chromium',
